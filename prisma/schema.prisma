@@ -10,27 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  id        String   @id @default(uuid())
-  statusId  Int      @default(0)
-  cnpj      String
+model User {
+  id        String    @id @default(uuid())
+  statusId  Int
   name      String
-  cheatedAt DateTime @default(now())
-  email     String   @unique
+  email     String    @unique
   password  String
-  userType  String
+  contacts  Contact[]
+  cpf       String
+  cnpj      String
+  cheatedAt DateTime  @default(now())
 
-  contacts Contact[]
-  status   Status    @relation(fields: [statusId], references: [id])
+  status Status @relation(fields: [statusId], references: [id])
 }
 
 model Contact {
-  id         Int    @id @default(autoincrement())
-  customerId String
-  type       String
-  contact    String
+  id      Int    @id @default(autoincrement())
+  userId  String
+  type    String
+  contact String
 
-  customer Customer @relation(fields: [customerId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Status {
@@ -38,7 +38,7 @@ model Status {
   customerId String
   name       String
 
-  customer Customer[]
+  User User[]
 }
 
 model Message {
