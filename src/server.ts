@@ -23,7 +23,9 @@ app.get('/customers', async (request, response) => {
       },
       cnpj: true,
       name: true,
-      contacts: true,
+      phoneNumber: true,
+      email: true,
+      whatsapp: true
     }
   });
 
@@ -79,8 +81,10 @@ app.post('/customer/contacts', async (request: any, response: any) => {
   return response.status(201).json(message);
 });
 
-app.get('/auth/login', async (request: any, response: any) => {
-  const body = request.body;
+app.get('/auth', async (request: any, response: any) => {
+  const body = request.data;
+
+  console.log(request);
 
   const user = await prisma.customer.findFirst({
     where: {
@@ -90,7 +94,6 @@ app.get('/auth/login', async (request: any, response: any) => {
       name: true,
       email: true,
       password: true,
-      userType: true,
       cheatedAt: true,
     }
   });

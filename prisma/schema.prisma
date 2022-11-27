@@ -10,41 +10,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String    @id @default(uuid())
-  statusId  Int
-  name      String
-  email     String    @unique
-  password  String
-  contacts  Contact[]
-  cpf       String
-  cnpj      String
-  cheatedAt DateTime  @default(now())
-
-  status Status @relation(fields: [statusId], references: [id])
+// Tabelas de clientes
+model Customer {
+  id          String   @id @default(uuid())
+  statusId    Int
+  name        String
+  email       String   @unique
+  password    String
+  phoneNumber String
+  whatsapp    String
+  cnpj        String
+  cheatedAt   DateTime @default(now())
+  status      Status   @relation(fields: [statusId], references: [id])
 }
 
-model Contact {
-  id      Int    @id @default(autoincrement())
-  userId  String
-  type    String
-  contact String
-
-  user User @relation(fields: [userId], references: [id])
+model Counter {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  phoneNumber String
+  whatsapp    String
+  cpf         String
+  cheatedAt   DateTime @default(now())
 }
 
-model Status {
-  id         Int    @id @default(autoincrement())
-  customerId String
-  name       String
-
-  User User[]
-}
-
+// Tabela de mensagens
 model Message {
   id          Int    @id @default(autoincrement())
   description String
   email       String
   name        String
   phoneNumber String
+}
+
+// Tabela de documentações dos clientes
+model Documentation {
+  id           Int     @id @default(autoincrement())
+  statusId     Int
+  deliveryDate String
+  obligation   String
+  description  String
+  attachment   Boolean
+  status       Status  @relation(fields: [statusId], references: [id])
+}
+
+// Tabelas auxiliares
+model Status {
+  id            Int             @id @default(autoincrement())
+  customerId    String
+  name          String
+  customer      Customer[]
+  documentation Documentation[]
 }
